@@ -1,0 +1,140 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<title>RescueMakati</title>
+	<meta charset="utf-8" />
+  	<meta name="format-detection" content="telephone=no" />
+  	<meta name="viewport" content="user-scalable=no, initial-scale=1, maximum-scale=1, minimum-scale=1, width=device-width" />
+	<!-- <link rel="stylesheet" href="assets/css/bootstrap.min.css" type="text/css"> -->
+	<link rel="stylesheet" href="assets/css/font.css" type="text/css">
+	<link rel="stylesheet" href="assets/css/holo-dark/base.css">
+	<link rel="stylesheet" href="assets/css/holo-dark/action-bars.css"> 
+	<link rel="stylesheet" href="assescrets/css/holo-dark/animations.css">
+	<link rel="stylesheet" href="assets/css/holo-dark/buttons.css">
+	<link rel="stylesheet" href="assets/css/holo-dark/content.css">
+	<link rel="stylesheet" href="assets/css/holo-dark/dialogs.css">
+	<link rel="stylesheet" href="assets/css/holo-dark/forms.css">
+	<link rel="stylesheet" href="assets/css/holo-dark/icomoon.css">
+	<link rel="stylesheet" href="assets/css/holo-dark/lists.css">
+	<link rel="stylesheet" href="assets/css/holo-dark/sliders.css">
+	<link rel="stylesheet" href="assets/css/holo-dark/spinners.css">
+	<link rel="stylesheet" href="assets/css/holo-dark/stack.css">
+	<link rel="stylesheet" href="assets/css/holo-dark/tabs.css">
+	<link rel="stylesheet" href="assets/css/holo-dark/toasts.css"> 
+	<link rel="stylesheet" href="assets/css/font-awesome.min.css">
+	
+
+<!--Custom CSS-->
+<style type="text/css">
+	.content{
+		color:black;
+		background-color:#34495E;
+	
+	}
+
+	#form{
+	
+	
+		height:30%;
+		width:100%;
+		margin: 40% auto;
+		/*border:1px solid black;*/
+	}
+
+	#form input{
+		background: white;
+	}
+	#unit-type-select {
+		width : 100%;
+		height: 48px;
+		background: white;
+		margin-bottom: 10px;
+	}
+</style>
+</head>
+<body>
+	<div class="page">
+		<div class="content" >
+		<!-- <div id="header">
+		
+		</div> -->
+			<div id="form">
+			<h1 style="text-align:center; font-size:40px; color:#E74C3C; margin-bottom:5px;"> <i style="font-size:60px;" class="fa fa-plus-square fa-lg"></i> Makati 168</h1>
+			<form class="inset" style="color:black; margin:0 auto;">
+			  
+			 <!--  <div class="flex-group"> -->
+			  	<select id="unit-type-select">
+			  		<option value="none">--Select Unit--</option>
+			  		<option value="ambulance">Ambulance</option>
+			  		<option value="police">Police</option>
+			  		<option value="police">Fire Truck</option>
+			  		<option value="others">Others</option>
+			  	</select>
+			  	<input type="text" id="platenum-input" class="input-text" placeholder="Plate Number">
+			   
+			 <!--  </div> -->
+			  	
+			  
+			  <center>
+			  	
+	        	<button id="login-btn" type="button" class="btn" style="width:100%; background:#18AF91;">Login</button>
+	        	<span style="color:white; display:none;" id="loading-span">Please Wait...</span>
+	      	  </center>
+			  
+			</form>
+			
+			</div>
+			
+		</div>
+	</div>
+</body>
+<script src="assets/js/jquery-2.0.0.min.js" type="text/javascript"></script>
+
+<script type="text/javascript" charset="utf-8" src="assets/js/cordova-2.5.0.js"></script>
+<script type="text/javascript" charset="utf-8" src="assets/js/default.js"></script>
+
+
+<script>
+document.addEventListener("backbutton", onBack, false);
+function onBack(){
+	 navigator.app.exitApp();
+}
+
+jQuery(function(){
+	if(localStorage.session == "true"){
+		location.href="index.html";
+	}
+	$("#login-btn").click(function(e){
+		e.preventDefault();
+		$("#loading-span").fadeIn();
+		$.ajax({
+			url     : 'http://rescuemakati.cloudapp.net/unit/login',
+			type    : 'GET',
+			dataType: 'JSON',
+			data    : {type : $("#unit-type-select").val(), platenum : $('#platenum-input').val()},
+			success : function(data){
+				$("#loading-span").hide();
+
+				if(data.status == "ok"){
+					localStorage.session = "true";
+					setUnitInfo(data.id, data.type, data.platenum);
+					location.href="index.html";
+				}else{
+					alert("Contact Administrator");
+				}			},
+			error : function(xhr, ajaxOptions, thrownError){
+				$("#loading-span").hide();
+				alert("Network Error");
+			}
+		});
+	});
+	
+		
+		
+	
+});
+	
+</script>
+<script src="assets/js/fingerblast.js"></script>
+ <script src="assets/js/prettify.js"></script>
+<script src="assets/js/documentation.js"></script>
